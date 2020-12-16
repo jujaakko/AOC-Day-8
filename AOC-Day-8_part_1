@@ -1,0 +1,51 @@
+"""
+Created on Wed Dec 16 09:34:27 2020
+
+@author: Juhana
+"""
+instructions = []
+import numpy as np
+
+with open(r"C:\Users\Juhana\Desktop\input8.txt", 'r') as file:
+    for line in file:
+        line = line.strip()
+        instructions.append(line)
+
+operating_index = 0
+operations_list = np.zeros(len(instructions))
+accumulator = 0
+instruction = ""
+
+
+"""
+PART 1
+"""
+
+
+def operation(operating_index,operation_type, amount):
+    if operation_type == "acc":
+        new_index = operating_index + 1
+        return amount, new_index
+    if operation_type == "nop":
+        amount = 0    
+        new_index = operating_index + 1
+        return amount, new_index
+    if operation_type == "jmp":
+        new_index = operating_index + amount  
+        amount = 0
+        return amount, new_index
+
+
+try:
+    while operations_list[operating_index] != 1:
+        line = instructions[operating_index].split()
+        operations_list[operating_index] = 1
+        amount, operating_index = operation(operating_index,line[0],int(line[1])) 
+        accumulator = accumulator + amount
+                
+except IndexError:
+    print("IndexError")
+    print(accumulator)
+
+
+print(accumulator)

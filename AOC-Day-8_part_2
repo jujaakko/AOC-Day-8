@@ -1,0 +1,75 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Dec 16 11:01:25 2020
+
+@author: Juhana
+"""
+import numpy as np
+
+
+def change_list(input_list,index):
+        def change_operation(operation_type):
+            if operation_type == "jmp":
+                new_operation_type = "nop"
+                return new_operation_type
+            if operation_type == "nop":
+                new_operation_type = "jmp"
+                return new_operation_type
+            return operation_type 
+    
+        output_list = np.array(input_list)
+        output_list[index,0] = change_operation(input_list[index,0])
+        return output_list    
+        
+
+def test_loop(input_list):
+    
+    def operation(operating_index,operation_type, amount):
+        if operation_type == "acc":
+            new_index = operating_index + 1
+            return amount, new_index
+        if operation_type == "nop":
+            amount = 0    
+            new_index = operating_index + 1
+            return amount, new_index
+        if operation_type == "jmp":
+            new_index = operating_index + amount  
+            amount = 0
+            return amount, new_index
+    
+    
+    operations_list= np.zeros(len(input_list))
+    operating_index = 0
+    accumulator = 0
+    try:
+        while operations_list[operating_index] != 1:
+            line = input_list[operating_index]
+            operations_list[operating_index] = 1
+            amount, operating_index = operation(operating_index,line[0],int(line[1])) 
+            accumulator = accumulator + amount
+                
+    except IndexError:
+            print("Accumulator:",accumulator)    
+            return False
+            
+    return True        
+
+
+ 
+instructions = []
+
+with open(r"C:\Users\Juhana\Desktop\input8.txt", 'r') as file:
+    for line in file:
+        line = line.strip().split()
+        instructions.append(line)
+
+instructions = np.array(instructions)
+input_list = instructions
+index = 0
+
+    
+while test_loop(input_list) == True:
+    input_list = instructions
+    input_list = change_list(input_list,index)
+    index += 1
+        
